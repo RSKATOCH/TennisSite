@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="angularjsNodejsTutorial">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tennis Predictor</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="javascripts/app.js" type="text/javascript"></script>
+    <!-- Custom styles for this template-->
+    <link href="/stylesheets/common.css" rel="stylesheet">
+    <link href="/stylesheets/tournament.css" rel="stylesheet">
+    <!-- Include your custom css file here if you're making one -->
+  </head>
+
+  <body style="overflow: hidden;">
+    <!-- Navbar -->
+    <nav role="navigation">
+      <div id="menuToggle">
+        <!--
+        A fake / hidden checkbox is used as click reciever,
+        so you can use the :checked selector on it.
+        -->
+        <input type="checkbox" />
+        
+        <span></span>
+        <span></span>
+        <span></span>
+        
+        <ul id="menu">
+          <a href="/twittersentiment"><li>Fan Favorites</li></a>
+          <a href="/headtohead"><li>Head to Head</li></a>
+          <a href="/playerpage"><li>Player Info</li></a>
+          <a href="/tournament"><li>Tournament</li></a>
+        </ul>
+      </div>
+    </nav>
+    <!-- Sample Content. You can either use this or make your own -->
+    <div class="user-container myrow" ng-controller="tournamentController">
+      <div class="contentBlock column_left">
+      
+        <form ng-submit="getTournamentResults()">
+          <h6 style="">Association</h6>
+          <label>  
+            <select name="courtType" ng-model="assoc" ng-change="getPlayers()">
+              <option value="Male" selected>ATP</option>
+              <option value="Female">WTA</option>
+            </select> 
+          </label>
+
+          <h6>Players</h6>
+          <label> Seed 1: <select name="Player1" ng-model="seedone" ng-options="x for x in availableTournamentPlayers"/> </label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+          <br>
+          <label> Seed 8: <select name="Player2" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/></label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+          <br>
+          <label> Seed 5: <select name="Player3" ng-model="seedfive" ng-options="x for x in availableTournamentPlayers"/></label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+          <br>
+          <label> Seed 4: <select name="Player4" ng-model="seedfour" ng-options="x for x in availableTournamentPlayers"/></label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+          <br>
+          <label> Seed 3: <select name="Player5" ng-model="seedthree" ng-options="x for x in availableTournamentPlayers"/></label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+          <br>
+          <label> Seed 6: <select name="Player6" ng-model="seedsix" ng-options="x for x in availableTournamentPlayers"/></label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+          <br>
+          <label> Seed 7: <select name="Player7" ng-model="seedseven" ng-options="x for x in availableTournamentPlayers"/></label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+          <br>
+          <label> Seed 2: <select name="Player8" ng-model="seedtwo" ng-options="x for x in availableTournamentPlayers"/></label>
+          <select name="Playerx" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/>
+
+          <!--<label> Seed 8: <select name="Player3" ng-model="seedeight" ng-options="x for x in availableTournamentPlayers"/> </label>
+          <p>check</p>
+          <label> Seed 5: <select name="Player3" ng-model="seedfive" ng-options="y for y in availableTournamentPlayers"/> </label>
+          <label> Seed 4: <select name="Player4" ng-model="seedfour" ng-options="x for x in availableTournamentPlayers"/> </label>
+          <label> Seed 3: <select name="Player5" ng-model="seedthree" ng-options="x for x in availableTournamentPlayers"/> </label>
+          <label> Seed 6: <select name="Player6" ng-model="seedsix" ng-options="x for x in availableTournamentPlayers"/> </label>
+          <label> Seed 7: <select name="Player7" ng-model="seedseven" ng-options="x for x in availableTournamentPlayers"/> </label>
+          <label> Seed 2: <select name="Player8" ng-model="seedtwo" ng-options="x for x in availableTournamentPlayers"/> </label>
+-->
+          <h6 style="padding-top: 20px;">Match Conditions</h6>
+          <label> Court type: 
+            <select name="courtType" ng-model="selectedCourtType">
+              <option value="Carpet" selected>Carpet</option>
+              <option value="Clay">Clay</option>
+              <option value="Grass">Grass</option>
+              <option value="Hard">Hard</option>
+            </select> 
+          </label>
+          <br> <br>
+          <input type="submit" value="Submit">  
+        </form>
+      </div>
+      <div class="contentBlock column_right" >
+        <div>
+          <main id="tournament">
+            <ul class="round round-1">
+              <li class="spacer">&nbsp;</li>
+              
+              <li class="game game-top"> {{seedone}} </li>
+              <li class="game game-spacer">&nbsp;</li>
+              <li class="game game-bottom "> {{seedeight}}</li>
+
+              <li class="spacer">&nbsp;</li>
+              
+              <li class="game game-top">{{seedfive}} </li>
+              <li class="game game-spacer">&nbsp;</li>
+              <li class="game game-bottom ">{{seedfour}} </li>
+
+              <li class="spacer">&nbsp;</li>
+              
+              <li class="game game-top ">{{seedthree}}</li>
+              <li class="game game-spacer">&nbsp;</li>
+              <li class="game game-bottom">{{seedsix}} </li>
+
+              <li class="spacer">&nbsp;</li>
+              
+              <li class="game game-top">{{seedseven}}</li>
+              <li class="game game-spacer">&nbsp;</li>
+              <li class="game game-bottom ">{{seedtwo}}</li>
+
+              <li class="spacer">&nbsp;</li>
+              
+              
+            </ul>
+            <ul class="round round-2">
+              <li class="spacer">&nbsp;</li>
+              
+              <li class="game game-top ">{{semi1A}} </li>
+              <li class="game game-spacer">&nbsp;</li>
+              <li class="game game-bottom ">{{semi1B}} </li>
+
+              <li class="spacer">&nbsp;</li>
+              
+              <li class="game game-top ">{{semi2A}} </li>
+              <li class="game game-spacer">&nbsp;</li>
+              <li class="game game-bottom ">{{semi2B}} </li>
+
+              <li class="spacer">&nbsp;</li>
+              
+              
+            </ul>
+            <ul class="round round-3">
+              <li class="spacer">&nbsp;</li>
+              <li class="game game-top ">{{finalA}} </li>
+              <li class="game game-spacer">&nbsp;</li>
+              <li class="game game-bottom ">{{finalB}} </li>
+              <li class="spacer">&nbsp;</li>
+            </ul>
+            <ul class="round round-4">
+              <li class="spacer">&nbsp;</li>
+              <li class="game game-top ">{{finalwinner}} </li>
+              <li class="spacer">&nbsp;</li>
+            </ul>
+            
+          </main>
+          <div>
+            <main id="tournament">
+              <ul class="round round-1">
+                <h5> Quarter-finals </h5>
+              </ul>
+              <ul class="round round-2">
+                <h5> Semi-finals </h5>
+              </ul>
+              <ul class="round round-3">
+                <h5> Finals </h5>
+              </ul>
+              <ul class="round round-4">
+                <h5> Champion </h5>
+              </ul>
+              
+            </main>
+          </div>
+
+        </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Include these before the end of body tag in every HTML file -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+
+</html>

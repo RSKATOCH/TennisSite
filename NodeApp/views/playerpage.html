@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="angularjsNodejsTutorial">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tennis Predictor</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="javascripts/app.js" type="text/javascript"></script>
+    <!-- Custom styles for this template-->
+    <link href="/stylesheets/common.css" rel="stylesheet">
+    <!-- Include your custom css file here if you're making one -->
+  </head>
+
+  <body style="overflow: hidden;">
+    <!-- Navbar -->
+    <nav role="navigation">
+      <div id="menuToggle">
+        <!--
+        A fake / hidden checkbox is used as click reciever,
+        so you can use the :checked selector on it.
+        -->
+        <input type="checkbox" />
+        
+        <span></span>
+        <span></span>
+        <span></span>
+        
+        <ul id="menu">
+          <!--<a href="/playerstats"><li>Player Stats</li></a>-->
+          <a href="/twittersentiment"><li>Fan Favorites</li></a>
+          <a href="/headtohead"><li>Head to Head</li></a>
+          <a href="/playerpage"><li>Player Info</li></a>
+          <a href="/tournament"><li>Tournament</li></a>
+        </ul>
+      </div>
+    </nav>
+    <!-- Sample Content. You can either use this or make your own -->
+    <div class="user-container myrow" ng-controller="playerController">
+      <div class="contentBlock column_left">  
+        <form ng-submit="getPlayerInfo()">
+          <h6>Player</h6>
+          <input type="text" ng-model="first_name" placeholder="First Name"/>
+          <br><br>
+          <input type="text" ng-model="last_name" placeholder="Last Name"/>
+          <br><br>
+          <input type="submit" value="Submit"> 
+          <div id="badInputName" style="display: none;">Please Enter valid names</div> 
+        </form>
+      </div>
+      <div class="contentBlock column_right" >
+        <div ng-show="ifPlayerSubmitted">
+          <h3> {{ playername }} </h3>
+        <table class="" >
+          <tbody style="display: inline-block;">
+          <tr>
+              <tr>
+                <td><a ng-href="{{picture}}" target = "_blank"><img src="https://www.atptour.com/-/media/tennis/players/head-shot/ghost-headshot.png" height="150" width="150"></a>
+                </td>
+              </tr> 
+            </tr>
+          </tbody>
+              <tbody style="display:inline-block;">
+                  <tr class="pinfo">
+                    <th>Birthdate</th>
+                    <td class="tl">{{DOBmonth}}/{{DOBday}}/{{ DOByear }}</td>
+                  </tr>
+                  <tr class="pinfo">
+                    <th>Gender</th>
+                    <td class="tl">{{ Gender }}</td>
+                  </tr>
+                  <tr class="pinfo">
+                    <th>Current rank</th>
+                    <td class="tl">{{ latestRank }}</td>
+                  </tr>
+                  <tr class="pinfo">
+                    <th>Number of Titles</th>
+                    <td class="tl">{{ NumOfTitles }}</td>
+                  </tr>
+                  <tr class="pinfo">
+                    <th>Dominant hand</th>
+                    <td class="tl">{{DominantHand}}</td>
+                  </tr>
+                  <tr class="pinfo">
+                    <th>Year turned pro</th>
+                    <td class="tl">{{ YearTurnedPro }}</td>
+                  </tr>
+                </tbody>
+          </tr>
+          
+        </table>
+          <!-- Do something here -->
+          <br>
+          <br>
+          <tr>
+              <div class="h5"> Previous matches </div>
+              <div style="max-height: 230px; overflow: scroll;">
+              <table class="pinfo">
+                
+                <tr>
+                  <table style="width: 100%;">
+                    <thead>
+                      <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Winner</th>
+                      <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Loser</th>
+                      <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Tournament Name</th>
+                      <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Round</th>
+                    </thead>
+                    <tbody>
+                      <tr class="h2h" ng-repeat="match in latestMatches">
+                        <td>{{match.winnerFirstName}} {{match.winnerLastName}}</td>
+                        <td>{{match.loserFirstName}} {{match.loserLastName}}</td>
+                        <td>{{match.TournamentName}}</td>
+                        <td>{{match.round}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </tr>
+              </table>
+              </div>
+            </tr>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Include these before the end of body tag in every HTML file -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="angularjsNodejsTutorial">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tennis Predictor</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="javascripts/app.js" type="text/javascript"></script>
+    <!-- Custom styles for this template-->
+    <link href="/stylesheets/common.css" rel="stylesheet">
+    <!-- Include your custom css file here if you're making one -->
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <span class="navbar-brand center">Tennis Predictor</span>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="/headtohead">Head to Head</a>
+          <a class="nav-item nav-link" href="/tournament">Tournament???</a>
+        </div>
+      </div>
+    </nav>
+
+    <nav role="navigation">
+      <div id="menuToggle">
+        <!--
+        A fake / hidden checkbox is used as click reciever,
+        so you can use the :checked selector on it.
+        -->
+        <input type="checkbox" />
+        
+        <span></span>
+        <span></span>
+        <span></span>
+        
+        <ul id="menu">
+          <a href="/playerinfo"><li>Player Info</li></a>
+          <a href="/twitterfanfave"><li>Twitter Fan Favorite</li></a>
+          <a href="/headtohead"><li>Head to Head</li></a>
+          <a href="/tournament"><li>Tournament</li></a>
+        </ul>
+      </div>
+    </nav>
+
+
+    <br>
+    <!-- Sample Content. You can either use this or make your own -->
+    <div class="container user-container">
+      <div class="contentBlock" ng-controller="headtoheadController">
+        <div class="h5">Head-to-Head</div>
+
+        <table class="center">
+          <thead>
+            <tr>
+              <form ng-submit="getPlayerH2H()">
+              <th class="plName" colspan="2"><label> Player 1: <input type="text" ng-model="playerone" placeholder="Rafael Nadal"/> </label></th>
+              <td class="gScore">25 - 15</td>
+              <th class="plName" colspan="2"><label> Player 2: <input type="text" ng-model="playertwo" placeholder="Roger Federer"/> </label></th>
+              <td> <input type="submit" value="Submit"> </td>
+              </form>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="one">
+              <td class="thumb" rowspan="7"><img ng-src="{{ playeroneimg }}" alt="Nadal Rafael" width="100" height="120"></td>
+              <td class="tr">2</td>
+              <th>ATP rankings</th>
+              <td class="tl">4</td>
+              <td class="thumb" rowspan="7"><img ng-src="{{ playertwoimg }}" alt="Federer Roger" width="100" height="120"></td>
+            </tr>
+            <tr class="two">
+              <td class="tr">3. 6. 1986</td>
+              <th>Birthdate</th>
+              <td class="tl">8. 8. 1981</td>
+            </tr>
+            <tr class="one">
+              <td class="tr">185 cm</td>
+              <th>Height</th>
+              <td class="tl">185 cm</td>
+            </tr>
+            <tr class="two">
+              <td class="tr">85 kg</td>
+              <th>Weight</th>
+              <td class="tl">80 kg</td>
+            </tr>
+            <tr class="one">
+              <td class="tr">left</td>
+              <th>Plays</th>
+              <td class="tl">right</td>
+            </tr>
+            <tr class="two">
+              <td class="tr">3. 6. 2001</td>
+              <th>Turned pro</th>
+              <td class="tl">8. 8. 1998</td>
+            </tr>
+            <tr class="one">
+              <td class="tr">0.19948</td>
+              <th>Favorability</th>
+              <td class="tl">0.300826</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <!-- Do something here -->
+        <form ng-submit="getPlayerH2HWinner()">
+          <div class="h5">Tournament Conditions</div>
+          <label> Court type: 
+            <select name="courtType" ng-model="selectedCourtType">
+              <option value="any" selected>Any</option>
+              <option value="clay">Clay</option>
+              <option value="grass">Grass</option>
+              <option value="hard">Hard</option>
+            </select> 
+          </label>
+          <br>
+          <label> Court setting: 
+            <select name="courtType" ng-model="selectedCourtSetting">
+              <option value="outdoor" selected>Outdoor</option>
+              <option value="indoor">Indoor</option>
+            </select> 
+          </label>
+          <br>
+          <input type="submit" value="Submit">
+        </form>
+        <br>
+        <div class="h5">Predicted Winner: {{ winner }}</div>
+      </div>
+    </div>
+
+    <!-- Include these before the end of body tag in every HTML file -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+
+</html>
+
+
+<!--    Made by Erik Terwan    -->
+<!--   24th of November 2015   -->
+<!--        MIT License        -->

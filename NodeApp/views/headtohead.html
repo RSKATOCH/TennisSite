@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="angularjsNodejsTutorial">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tennis Predictor</title>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="javascripts/app.js" type="text/javascript"></script>
+    <!-- Custom styles for this template-->
+    <link href="/stylesheets/common.css" rel="stylesheet">
+    <!-- Include your custom css file here if you're making one -->
+  </head>
+
+  <body style="overflow: hidden;">
+    <!-- Navbar -->
+    <nav role="navigation">
+      <div id="menuToggle">
+        <!--
+        A fake / hidden checkbox is used as click reciever,
+        so you can use the :checked selector on it.
+        -->
+        <input type="checkbox" />
+        
+        <span></span>
+        <span></span>
+        <span></span>
+        
+        <ul id="menu">
+          <a href="/twittersentiment"><li>Fan Favorites</li></a>
+          <a href="/headtohead"><li>Head to Head</li></a>
+          <a href="/playerpage"><li>Player Info</li></a>
+          <a href="/tournament"><li>Tournament</li></a>
+        </ul>
+      </div>
+    </nav>
+    <!-- Sample Content. You can either use this or make your own -->
+    <div class="user-container myrow" ng-controller="headtoheadController">
+      <div class="contentBlock column_left">  
+        <form ng-submit="getPlayerH2H()">
+          <h6>Players</h6>
+          <label> Player 1: <input type="text" ng-model="playerone" placeholder="Rafael Nadal"/> </label>
+          <label> Player 2: <input type="text" ng-model="playertwo" placeholder="Roger Federer"/> </label>
+          <div id="badInput" style="display: none;">Please Enter valid names</div>
+          <h6 style="padding-top: 20px;">Match Conditions</h6>
+          <label> Court type: 
+            <select name="courtType" ng-model="selectedCourtType">
+              <option value="Carpet" selected>Carpet</option>
+              <option value="Clay">Clay</option>
+              <option value="Grass">Grass</option>
+              <option value="Hard">Hard</option>
+            </select> 
+          </label>
+          <label> Round: 
+            <select name="round" ng-model="roundInput">
+              <option value="BR" selected>BR</option>
+              <option value="F">F</option>
+              <option value="Q1">Q1</option>
+              <option value="Q2">Q2</option>
+              <option value="Q3">Q3</option>
+              <option value="Q4">Q4</option>
+              <option value="QF">QF</option>
+              <option value="R1">R1</option>
+              <option value="R128">R128</option>
+              <option value="R15">R15</option>
+              <option value="R16">R16</option>
+              <option value="R3">R3</option>
+              <option value="R31">R31</option>
+              <option value="R32">R32</option>
+              <option value="R63">R63</option>
+              <option value="R64">R64</option>
+              <option value="R7">R7</option>
+              <option value="RR">RR</option>
+              <option value="SF">SF</option>
+            </select> 
+          </label>
+          <!--<label> Court setting: 
+            <select name="courtType" ng-model="selectedCourtSetting">
+              <option value="outdoor" selected>Outdoor</option>
+              <option value="indoor">Indoor</option>
+            </select> 
+          </label> -->
+          <br> <br>
+          <input type="submit" value="Submit">  
+        </form>
+      </div>
+      <div class="contentBlock column_right" >
+        <div ng-show="ifH2HSubmitted">
+        <div class="h5">Head-to-Head Predicted Winner: {{ predWinner }} </div>
+        <br>
+        <table class="center">
+          <thead>
+            <tr>
+              <th class="plName" colspan="2">{{ playeronename }}</th>
+              <td class="gScore"> Vs. </td>
+              <th class="plName" colspan="2">{{ playertwoname }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="one">
+              <td class="thumb" rowspan="7"><img ng-src="https://www.atptour.com/-/media/tennis/players/head-shot/ghost-headshot.png" alt="playeronename" width="100" height="120"></td>
+              <td class="tr">{{latestRankone}}</td>
+              <th>Rank</th>
+              <td class="tl">{{latestRanktwo}}</td>
+              <td class="thumb" rowspan="7"><img ng-src="https://www.atptour.com/-/media/tennis/players/head-shot/ghost-headshot.png" alt="playertwoname" width="100" height="120"></td>
+            </tr>
+            <tr class="two">
+              <td class="tr">{{ Genderone }}</td>
+              <th>Gender</th>
+              <td class="tl">{{ Gendertwo }}</td>
+            </tr>
+            <tr class="two">
+              <td class="tr">{{DOBonemonth}}/{{DOBoneday}}/{{ DOBoneyear }}</td>
+              <th>Birthdate</th>
+              <td class="tl">{{DOBtwomonth}}/{{DOBtwoday}}/{{ DOBtwoyear }}</td>
+            </tr>
+            <tr class="one">
+              <td class="tr">{{ NumOfTitlesone }}</td>
+              <th>Number of Titles</th>
+              <td class="tl">{{ NumOfTitlestwo }}</td>
+            </tr>
+            <tr class="two">
+              <td class="tr">{{YearTurnedProone}}</td>
+              <th>Year Turned Pro</th>
+              <td class="tl">{{YearTurnedProtwo}}</td>
+            </tr>
+            <tr class="one">
+              <td class="tr">{{DominantHandone}}</td>
+              <th>Dominant Hand</th>
+              <td class="tl">{{DominantHandtwo}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <!-- Do something here -->
+        <div class="h5">Head-to-head Record </div>
+        <div style="max-height: 230px; overflow: scroll;">
+        <table class="h2h">
+          <thead>
+            <tr>
+              <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Winner First Name</th>
+                <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Winner Last Name</th>
+                <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Loser First Name</th>
+                <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Loser Last Name</th>
+                <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">Tournament Name</th>
+                <th class="plName h2h" colspan="1" style="position: sticky; top: 0;">round</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="h2h" ng-repeat="latestMatch in latestMatchesVs">
+              <td>{{latestMatch.winnerFirstName}}</td>
+              <td>{{latestMatch.winnerLastName}}</td>
+              <td>{{latestMatch.loserFirstName}}</td>
+              <td>{{latestMatch.loserLastName}}</td>
+              <td>{{latestMatch.TournamentName}}</td>
+              <td>{{latestMatch.round}}</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Include these before the end of body tag in every HTML file -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+
+</html>
